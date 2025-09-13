@@ -3,13 +3,22 @@ import os
 from dotenv import load_dotenv
 
 load_dotenv() 
-def main():
+def text_to_card():
 	client = genai.Client(api_key=os.getenv('GEMINI_API'))
 
 
 	customPrompt = ""
 	with open("custPrompt.txt","r") as f:
 		customPrompt = f.read()
+
+	with open("input_note.txt", "r") as f:
+		lines = f.readlines()
+
+	# Keep only non-empty lines (stripping whitespace)
+	lines = [line for line in lines if line.strip() != ""]
+
+	with open("input_note.txt", "w") as f:
+		f.writelines(lines)
 
 	input = ""
 	with open("input_note.txt","r") as f:

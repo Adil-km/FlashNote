@@ -58,11 +58,10 @@ def save_to_text_file(text_content, output_filename):
 
 
 
-def ImageOCR(image_path):
+def image_OCR(image_path):
     ocr_api_key = os.getenv('OCR_API')
     # Get the transcribed text
     text_result = ocr_image(image_path, ocr_api_key)
-
 
     if not text_result.startswith("An error occurred"):
         output_file_name = 'input_note.txt'
