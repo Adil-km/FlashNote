@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block title %}Upload image{% endblock %}
+
+
+{% block body %}
+<header class="navbar">
+    <div class="navbar-left">
+        <a href="#" class="brand-name">FlashNote</a>
+    </div>
+    <div class="navbar-right">
+        <a href="#">About</a>
+        <a href="#">Source Code</a>
+    </div>
+</header>
+
+<main class="content-container">
+    <div class="upload-area">
+        <h1>Start a new note</h1>
+        <p>Select your preferred method to upload your content.</p>
+        <div class="option-buttons">
+            <a href="{{ url_for('upload_pdf') }}" class="option-btn">PDF</a>
+            <a href="{{ url_for('upload_img') }}" class="option-btn">Image</a>
+            <a href="{{ url_for('upload_txt') }}" class="option-btn">Text</a>
+        </div>
+    </div>
+</main>
+</body>
+</html>
+{% endblock %}

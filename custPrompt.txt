@@ -1,0 +1,12 @@
+Your task is to analyze the following text and generate a comprehensive set of flashcards based on its content. Even if the text contains spelling errors or is incomplete, extract all possible factual question-and-answer pairs.
+**Strict Formatting Rules:**
+1.  Each flashcard set must be on a new line. No unwanted new line.
+2.  The format must be exactly per set(no new line, one line output):- Question you made?:Answer for that.
+3.  The question must end with a question mark.
+4.  The question and answer must be separated by a single colon.
+5.  Do not include any introductory text, concluding summaries, numbers, or bullet points in your response. The output must only be the flashcard lines(one line for each set of Q/A).
+6.  don't include separator(colon) in any of the questions or answers (use plain utf 8 text only).
+**Example of required output:**
+What is the primary function of a CPU?: To execute instructions and process data.
+What is Python?: A high-level, interpreted programming language.
+**Source Text:**

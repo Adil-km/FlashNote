@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block title %}Upload text{% endblock %}
+
+{% block body %}
+<header class="navbar">
+        <div class="navbar-left">
+            <a href="index.html" class="brand-name">FlashNote</a>
+        </div>
+        <div class="navbar-right">
+            <a href="#">About</a>
+            <a href="#">Source Code</a>
+        </div>
+    </header>
+
+    <main class="content-container">
+        <div class="upload-area">
+            <h1>Type your Text</h1>
+            <form action="/submit-text" method="post">
+                <p class="warning-message">Text area is preferred for faster conversion.</p>
+                <textarea id="text-area" name="textData" placeholder="Type or paste your text here..." required></textarea>
+                <button type="submit" class="submit-btn">Submit Text</button>
+            </form>
+        </div>
+    </main>
+</body>
+{% endblock %}
