@@ -4,6 +4,8 @@ from flask import Flask, flash, request, redirect, url_for, render_template, jso
 from werkzeug.utils import secure_filename
 
 import test
+import image_to_text
+
 import threading
 
 UPLOAD_FOLDER = 'uploads'
@@ -48,7 +50,12 @@ def upload_img():
                 os.makedirs(upload_dir, exist_ok=True)
                 file_path = os.path.join(upload_dir, filename)
                 file.save(file_path)
-                return "File saved successfully"
+                image_to_text.ImageOCR(file_path)
+                os.remove(file_path)
+                time.sleep(1)
+                threading.Thread(target=run_conversion).start()
+                return redirect(url_for('download'))
+            
         return "No image provide"
     return render_template("image-upload.html")
 
