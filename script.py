@@ -1,4 +1,4 @@
-import io
+import io, os
 import requests
 from pdf2image import convert_from_path
 
@@ -56,7 +56,7 @@ def save_to_text_file(text_content, output_filename):
 
 
 pdf_file_path = 'sample.pdf'
-ocr_api_key = ''
+ocr_api_key = os.getenv('OCR_API')
 
 # Get the full transcribed text
 transcribed_text = convert_and_transcribe_pdf(pdf_file_path, ocr_api_key)

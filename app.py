@@ -1,6 +1,10 @@
 import os
-from flask import Flask, flash, request, redirect, url_for, render_template
+import time
+from flask import Flask, flash, request, redirect, url_for, render_template, jsonify
 from werkzeug.utils import secure_filename
+
+import test
+import threading
 
 UPLOAD_FOLDER = 'uploads'
 ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg'}
@@ -17,10 +21,6 @@ def allowed_file(filename):
 @app.route('/', methods=['GET'])
 def home():
     return render_template("home.html")
-
-@app.route('/converted', methods=["GET"])
-def download():
-    return render_template("convert.html")
 
 @app.route('/pdf', methods=['GET', 'POST'])
 def upload_pdf():
@@ -56,13 +56,29 @@ def upload_img():
 def upload_txt():
     if request.method == "POST":
         res= request.form["textData"]
-        return res
+        with open('input_note.txt','w') as f:
+            f.write(res)
+        os.remove("response.txt")
+        time.sleep(1)
+        threading.Thread(target=run_conversion).start()
+        return redirect(url_for('download'))
     return render_template("text-upload.html")
 
+@app.route('/converted', methods=["GET"])
+def download():
+    return render_template("convert.html")
 
 
+@app.route('/check_status')
+def check_status():
+    if os.path.exists("response.txt"):
+        return jsonify({"ready": True})
+    return jsonify({"ready": False})
 
-
+def run_conversion():
+    res = test.main()
+    print(res)
+    return "Flash card making started"
 
 if __name__ == "__main__":
     app.run()

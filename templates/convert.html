@@ -1,24 +1,40 @@
 {% extends 'base.html' %}
-
-{% block title %}converted file{% endblock %}
-
+{% block title %}Download{% endblock %}
 
 {% block body %}
+<main class="content-container">
+    <div class="upload-area">
+        <h1>File Conversion</h1>
 
-    <div class="back">
-        <a href="{{ url_for('home')}}" class="back-btn">Convert another</a>
-    </div>
+        <!-- Loading message -->
+        <div id="loading">⏳ Processing your file... please wait</div>
 
-    <main class="content-container">
-        <div class="upload-area">
-            <h1>Conversion Complete!</h1>
-            <p>Your file is ready to download.</p>
-            <a href="{{ url_for('static', filename='uploads/sample.pdf')}}" download="converted-file.pdf" class="download-btn">Download Converted pdf file</a>
-            <a href="{{ url_for('static', filename='uploads/example_02.jpg')}}" download="converted-file.jpg" class="download-btn">Download Converted image file</a>
-            <a href="{{ url_for('static', filename='uploads/images.png')}}" download="converted-file.png" class="download-btn">Download Converted image file</a>
-
+        <!-- Downloads (hidden until ready) -->
+        <div id="downloads" style="display: none;">
+            <p>Your file is ready to download!</p>
+            <a href="{{ url_for('static', filename='uploads/response.txt')}}" 
+               download="flashCard.csv" class="download-btn">
+               Download Converted CSV file
+            </a>
         </div>
-    </main>
+    </div>
+</main>
 
+<script>
+    function checkStatus() {
+        fetch("/check_status")
+            .then(res => res.json())
+            .then(data => {
+                if (data.ready) {
+                    document.getElementById("loading").style.display = "none";
+                    document.getElementById("downloads").style.display = "block";
+                } else {
+                    setTimeout(checkStatus, 2000); // try again in 2s
+                }
+            });
+    }
 
+    // Start polling when page loads
+    window.onload = checkStatus;
+</script>
 {% endblock %}
