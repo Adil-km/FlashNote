@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block title %}converted file{% endblock %}
+
+
+{% block body %}
+
+    <div class="back">
+        <a href="{{ url_for('home')}}" class="back-btn">Convert another</a>
+    </div>
+
+    <main class="content-container">
+        <div class="upload-area">
+            <h1>Conversion Complete!</h1>
+            <p>Your file is ready to download.</p>
+            <a href="{{ url_for('static', filename='uploads/sample.pdf')}}" download="converted-file.pdf" class="download-btn">Download Converted pdf file</a>
+            <a href="{{ url_for('static', filename='uploads/example_02.jpg')}}" download="converted-file.jpg" class="download-btn">Download Converted image file</a>
+            <a href="{{ url_for('static', filename='uploads/images.png')}}" download="converted-file.png" class="download-btn">Download Converted image file</a>
+
+        </div>
+    </main>
+
+
+{% endblock %}
