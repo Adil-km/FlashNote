@@ -1,6 +1,6 @@
 import os
 import time
-from flask import Flask, flash, request, redirect, url_for, render_template, jsonify
+from flask import Flask, flash, request, redirect, url_for, render_template, jsonify, session
 from werkzeug.utils import secure_filename
 
 from pdf_to_cards import pdf_OCR
@@ -23,10 +23,12 @@ def allowed_file(filename):
 
 @app.route('/', methods=['GET'])
 def home():
+    session.clear()
     return render_template("home.html")
 
 @app.route('/pdf', methods=['GET', 'POST'])
 def upload_pdf():
+    session.clear()
     if request.method == "POST":
         if "pdfFile" in request.files:
             file = request.files["pdfFile"]
@@ -58,6 +60,7 @@ def process_file(file_type,file_path):
 
 @app.route('/image', methods=['GET', 'POST'])
 def upload_img():
+    session.clear()
     if request.method == "POST":
         if "imageFile" in request.files:
             file = request.files["imageFile"]
@@ -76,6 +79,7 @@ def upload_img():
 
 @app.route('/text', methods=['GET', 'POST'])
 def upload_txt():
+    session.clear()
     if request.method == "POST":
         res= request.form["textData"]
         with open('input_note.txt','w') as f:
@@ -91,7 +95,15 @@ def upload_txt():
 
 @app.route('/converted', methods=["GET"])
 def download():
-    return render_template("convert.html")
+    cards = []
+    if os.path.exists("response.txt"):
+        with open("response.txt", "r") as f:
+            cards=f.read()
+        session["cards"] = cards
+        # os.remove("response.txt")
+    else:
+        cards = session.get("cards", [])
+    return render_template("convert.html", cards=cards)
 
 
 @app.route('/check_status')

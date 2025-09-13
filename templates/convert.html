@@ -8,18 +8,37 @@
 
 
         <div id="loading">⏳ Processing your file... please wait</div>
+        {% if cards %}
+            <textarea id="text-area" name="textData">{{cards}}</textarea>
+        {% endif %}
 
         <div id="downloads" style="display: none;">
             <p>Your file is ready to download!</p>
-            <a href="{{ url_for('static', filename='uploads/response.txt')}}" 
-               download="flashCard.csv" class="download-btn">
+            <button onclick="downloadCSVFile()" class="download-btn">
                Download Converted CSV file
-            </a>
+            </button>
         </div>
     </div>
 </main>
 
 <script>
+        function downloadCSVFile() {
+        const textContent = document.getElementById('text-area').value;
+        const filename = 'FlashNote.csv'; // You can make this dynamic if needed
+
+        const blob = new Blob([textContent], { type: 'text/plain' });
+        const url = URL.createObjectURL(blob);
+
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = filename;
+        document.body.appendChild(a); // Append to body is necessary for some browsers
+        a.click();
+
+        document.body.removeChild(a); // Clean up the temporary element
+        URL.revokeObjectURL(url); // Release the object URL
+    }
+
     function checkStatus() {
         fetch("/check_status")
             .then(res => res.json())
@@ -27,11 +46,15 @@
                 if (data.ready) {
                     document.getElementById("loading").style.display = "none";
                     document.getElementById("downloads").style.display = "block";
+                    if (!window.location.search.includes("reloaded")) {
+                        window.location.href = window.location.pathname + "?reloaded=1";
+                    }
                 } else {
-                    setTimeout(checkStatus, 2000); // try again in 2s
+                    setTimeout(checkStatus, 2000); // keep checking
                 }
             });
     }
+
 
     // Start polling when page loads
     window.onload = checkStatus;
