@@ -24,6 +24,8 @@ def text_to_card():
 	with open("input_note.txt","r") as f:
 		input = f.read()
 
+	
+	
 	prompt = customPrompt+"\n \"" + input + "\n \""
 
 	response = client.models.generate_content(
@@ -37,4 +39,6 @@ def text_to_card():
 
 	with open("response.txt", "w") as f:
 		f.write(res)
+	with open("input_note.txt","w") as f:
+		f.write("")
 	return "test.py run successfully"

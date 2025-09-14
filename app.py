@@ -8,7 +8,8 @@ from image_to_text import image_OCR
 from text_to_cards import text_to_card
 
 import threading
-
+import markdown
+import emoji
 UPLOAD_FOLDER = 'temp_uploads'
 ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg'}
 
@@ -27,6 +28,8 @@ def session_clear():
 @app.route('/', methods=['GET'])
 def home():
     session_clear()
+    open("input_note.txt","r").close()
+    open("response.txt","r").close()
     return render_template("home.html")
 
 @app.route('/pdf', methods=['GET', 'POST'])
@@ -58,6 +61,7 @@ def process_file(file_type,file_path):
     text_to_card()
     time.sleep(10)
     open("response.txt", "w").close()
+    open("input_note.txt","r").close()
 
 
 @app.route('/image', methods=['GET', 'POST'])
@@ -115,7 +119,29 @@ def check_status():
 
 def run_conversion():
     text_to_card()
+    reset()
     return "Flash card making started"
+
+def reset():
+    open("input_note.txt","r").close()
+    print("Reset file")
+    return
+
+@app.route('/about')
+def about():
+    try:
+        with open('README.md', 'r', encoding='utf-8') as f:
+            readme_content = f.read()
+            # Convert emoji shortcodes to actual emojis
+            emojized_content = emoji.emojize(readme_content, language='en')
+        
+        # Convert Markdown with emojis to HTML
+        html_content = markdown.markdown(emojized_content)
+        
+        return render_template('about.html', readme_html=html_content)
+    except FileNotFoundError:
+        return "README.md not found!", 404
+
 
 if __name__ == "__main__":
     app.run()

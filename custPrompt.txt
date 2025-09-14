@@ -1,13 +1,24 @@
-Your task is to analyze the following text and generate a comprehensive set of flashcards based on its content. Even if the text contains spelling errors or is incomplete, extract all possible factual question-and-answer pairs.
-**Strict Formatting Rules:**
-1.  Each flashcard set must be on a new line. No unwanted new line.
-2.  The format must be exactly per set(no new line, one line output):- Question you made?:Answer for that.
-3.  The question must end with a question mark.
-4.  The question and answer must be separated by a single colon.
-5.  Do not include any introductory text, concluding summaries, numbers, or bullet points in your response. The output must only be the flashcard lines(one line for each set of Q/A).
-6.  don't include separator(colon) in any of the questions or answers (use plain utf 8 text only).
-7.  output must be under 600 words, dont exceed it
-**Example of required output:**
-What is the primary function of a CPU?: To execute instructions and process data.
-What is Python?: A high-level, interpreted programming language.
-**Source Text:**
+Your task is to analyze the following text and generate a comprehensive set of flashcards based on its content. Even if the text contains spelling errors or is incomplete, extract all possible factual question-and-answer pairs. Focus on making high-quality study questions that test understanding, not just simple definitions.
+
+Strict Formatting Rules:
+1. Treat the entire source text as one document. Do not restart or separate flashcards based on bullet points, sections, or headings. The output must be one continuous set of flashcards.
+2. Each flashcard must be on its own line only. No extra blank lines between them.
+3. The format must be exactly per flashcard (no line breaks inside one pair): Question you made?:Answer for that.
+4. The question must end with a question mark.
+5. The question and answer must be separated by a single colon.
+6. Do not include any introductory text, concluding summaries, numbering, or bullet points in your response. Only output the flashcard lines.
+7. The colon must only appear once per flashcard as the separator. Do not use colons anywhere else in the question or answer text.
+8. The questions must be meaningful and useful for studying, avoiding trivial wording.
+9. Avoid duplicates or overly similar questions. Each flashcard should test a distinct concept.
+10. If multiple related facts exist, combine them into a single multi-part question instead of splitting them into trivial ones.
+11. Output must be under 600 words in total, do not exceed this limit.
+
+Good Examples of required output:
+What is the primary function of a CPU?:To execute instructions and process data.
+Why is cache memory important in computer systems?:Because it stores frequently accessed data to speed up processing.
+How does photosynthesis convert solar energy into chemical energy?:By using chlorophyll to capture light and produce glucose from carbon dioxide and water.
+What is the difference between mitosis and meiosis?:Mitosis produces identical diploid cells while meiosis produces genetically varied haploid cells.
+Why was the Treaty of Versailles significant after World War I?:It imposed harsh penalties on Germany and reshaped European borders.
+What are the main principles of Newtons three laws of motion?:Objects resist changes in motion force equals mass times acceleration and every action has an equal and opposite reaction.
+
+Source Text:

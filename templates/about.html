@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{% block title %}Upload image{% endblock %}
+{% block head %}
+<script>
+    localStorage.removeItem("data")
+</script>
+
+    <style>
+        /* Add some basic styling for Markdown elements */
+        .readme { 
+            font-family: sans-serif; 
+            line-height: 1.6; 
+            max-width: 800px; 
+            margin: auto; 
+            padding: 20px; 
+            background-color: white;
+            border-radius: 5px;
+        }
+        .readme h1,
+        .readme h2,
+        .readme h3 { 
+            color: #333; }
+        .readme a{
+            text-decoration:none;
+            padding: 3px;
+            margin-inline: 3px;
+            background-color: #f9efdc;
+            color: rgb(0, 27, 85);
+            border-radius: 4px;
+        }
+    </style>
+{% endblock %}
+
+
+{% block body %}
+
+{% include "back-btn.html" %}
+
+<main class="content-container">
+    <div class="readme">
+        {{ readme_html | safe }}
+    </div>
+</main>
+
+
+
+{% endblock %}
