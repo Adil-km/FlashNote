@@ -152,10 +152,10 @@ body {
 /* ... (existing styles) ... */
 
 .download-btn {
-    background-color: #2196F3; /* A blue color for download */
+    background-color: #27cd3a; /* A blue color for download */
     color: white;
     padding: 15px 30px;
-    font-size: 18px;
+    font-size: 1rem;
     font-weight: bold;
     border: none;
     border-radius: 5px;
@@ -167,5 +167,5 @@ body {
 }
 
 .download-btn:hover {
-    background-color: #1976D2;
+    background-color: #1fa32f;
 }

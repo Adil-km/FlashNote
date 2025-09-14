@@ -1,17 +1,45 @@
 {% extends 'base.html' %}
 
 {% block title %}Upload image{% endblock %}
+{% block head %}
+<script>
+window.onload = () =>{
+    document.getElementById('image-input').addEventListener('change', (e)=> {
+    if (e.target.files.length > 0) {
+        const file = e.target.files[0];
+        if (file) {
+            const fileSizeInBytes = file.size;
+            const fileSizeInMB = (fileSizeInBytes / (1024 * 1024)).toFixed(2);
+
+            if(fileSizeInMB<10.5){
+                localStorage.setItem("data","true")
+            }else{
+                alert("Image size should be less than 10MB.")
+                document.getElementById('form').addEventListener('submit', function(eventBtn) {
+                    eventBtn.preventDefault(); 
+                });
+                console.log(`File Size: ${fileSizeInMB} MB`);
+            }
+        }
+    } else {
+        localStorage.setItem("data","")
+    }
+});
+
+}
+    
+</script>
+{% endblock %}
 
 {% block body %}
 
-    <div class="back">
-        <a href="{{ url_for('home')}}" class="back-btn">Go back</a>
-    </div>
+{% include "back-btn.html" %}
+
     
     <main class="content-container">
         <div class="upload-area">
             <h1>Upload an Image</h1>
-            <form method="post" enctype="multipart/form-data">
+            <form id="form" method="post" enctype="multipart/form-data">
                 <p class="warning-message">Warning: Image size should be less than 10MB.</p>
                 <input type="file" id="image-input" name="imageFile" accept=".jpg,.jpeg,.png" required>
                 <button type="submit" class="submit-btn">Submit Image</button>

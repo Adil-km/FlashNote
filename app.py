@@ -21,14 +21,17 @@ def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
+def session_clear():
+    session.pop("cards", None)
+
 @app.route('/', methods=['GET'])
 def home():
-    session.clear()
+    session_clear()
     return render_template("home.html")
 
 @app.route('/pdf', methods=['GET', 'POST'])
 def upload_pdf():
-    session.clear()
+    session_clear()
     if request.method == "POST":
         if "pdfFile" in request.files:
             file = request.files["pdfFile"]
@@ -52,15 +55,14 @@ def process_file(file_type,file_path):
         image_OCR(file_path)
     else:
         return "An error occurred: file type not valid"
-    text_to_card() 
-    if os.path.exists(file_path):
-        os.remove(file_path)
-    else:
-        print("File not found:", file_path)
+    text_to_card()
+    time.sleep(10)
+    open("response.txt", "w").close()
+
 
 @app.route('/image', methods=['GET', 'POST'])
 def upload_img():
-    session.clear()
+    session_clear()
     if request.method == "POST":
         if "imageFile" in request.files:
             file = request.files["imageFile"]
@@ -79,7 +81,7 @@ def upload_img():
 
 @app.route('/text', methods=['GET', 'POST'])
 def upload_txt():
-    session.clear()
+    session_clear()
     if request.method == "POST":
         res= request.form["textData"]
         with open('input_note.txt','w') as f:
@@ -88,30 +90,28 @@ def upload_txt():
         # clear the file
         open("response.txt", "w").close()
         
-        time.sleep(1)
         threading.Thread(target=run_conversion).start()
         return redirect(url_for('download'))
     return render_template("text-upload.html")
 
 @app.route('/converted', methods=["GET"])
 def download():
-    cards = []
-    if os.path.exists("response.txt"):
-        with open("response.txt", "r") as f:
-            cards=f.read()
-        session["cards"] = cards
-        # os.remove("response.txt")
-    else:
-        cards = session.get("cards", [])
-    return render_template("convert.html", cards=cards)
+    return render_template("convert.html")
 
 
 @app.route('/check_status')
 def check_status():
     try:
-        return jsonify({"ready": os.stat("response.txt").st_size > 0})
-    except FileNotFoundError:
+        data = None
+        if os.stat("response.txt").st_size > 0:
+            with open("response.txt", "r") as f:
+                data = f.read()
+                print(data)
+            open("response.txt", "w").close()
+            return jsonify({"ready":True,"data":data})
         return jsonify({"ready": False})
+    except FileNotFoundError:
+        return jsonify({"ready": False,"data":"Error occured."})
 
 def run_conversion():
     text_to_card()

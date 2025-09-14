@@ -1,11 +1,22 @@
 {% extends 'base.html' %}
 
 {% block title %}Upload text{% endblock %}
+{% block head %}
+<script>
+    function setLocal(){
+        if(document.getElementById("text-area").value.length > 0){
+            localStorage.setItem("data","true")
+        }else{
+            localStorage.setItem("data","")
+        }
+    }
+</script>
+{% endblock %}
+
 
 {% block body %}
-    <div class="back">
-        <a href="{{ url_for('home')}}" class="back-btn">Go back</a>
-    </div>
+
+{% include "back-btn.html" %}
 
     <main class="content-container">
         <div class="upload-area">
@@ -13,7 +24,7 @@
             <form method="post" enctype="multipart/form-data">
                 <p class="warning-message">Text area is preferred for faster conversion.</p>
                 <textarea id="text-area" name="textData" placeholder="Type or paste your text here..." required></textarea>
-                <button type="submit" class="submit-btn">Submit Text</button>
+                <button type="submit" class="submit-btn" onclick="setLocal()">Submit Text</button>
             </form>
         </div>
     </main>

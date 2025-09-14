@@ -1,6 +1,11 @@
 {% extends 'base.html' %}
 
 {% block title %}Upload image{% endblock %}
+{% block head %}
+<script>
+    localStorage.removeItem("data")
+</script>
+{% endblock %}
 
 
 {% block body %}
@@ -15,6 +20,6 @@
         </div>
     </div>
 </main>
-</body>
-</html>
+
+
 {% endblock %}

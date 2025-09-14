@@ -2,61 +2,120 @@
 {% block title %}Download{% endblock %}
 
 {% block body %}
+
+
 <main class="content-container">
-    <div class="upload-area">
+    <div class="upload-area" id="upload-area">
         <h1>File Conversion</h1>
 
 
         <div id="loading">⏳ Processing your file... please wait</div>
-        {% if cards %}
-            <textarea id="text-area" name="textData">{{cards}}</textarea>
-        {% endif %}
+        <textarea id="text-area" name="textData" style="display: none;"></textarea>
 
         <div id="downloads" style="display: none;">
             <p>Your file is ready to download!</p>
+            <a href="{{ url_for('home')}}" class="back-btn" style="padding: 15px 30px;">Convert another</a>
             <button onclick="downloadCSVFile()" class="download-btn">
                Download Converted CSV file
             </button>
+
         </div>
     </div>
 </main>
 
 <script>
-        function downloadCSVFile() {
-        const textContent = document.getElementById('text-area').value;
-        const filename = 'FlashNote.csv'; // You can make this dynamic if needed
+    
+function downloadCSVFile() {
+    const textContent = document.getElementById('text-area').value;
+    const filename = 'FlashNote.csv';
+    
+    const blob = new Blob([textContent], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+    
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+}
 
-        const blob = new Blob([textContent], { type: 'text/plain' });
-        const url = URL.createObjectURL(blob);
+function checkStatus() {
+    const localData = localStorage.getItem('data');
+    fetch("/check_status")
+    .then(res => {
+        if (!res.ok) {
+            throw new Error(`HTTP error! status: ${res.status}`);
+        }        
+        if(localData == "" || !localData){
+            throw new Error("No file to convertion");
+        }
+        return res.json();
+    })
+    .then(data => {
+        if (localData == "true") {
+            // console.log(localData);
+        }
+        console.log("converting.....");
 
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = filename;
-        document.body.appendChild(a); // Append to body is necessary for some browsers
-        a.click();
+        if ((data.ready && localData !="")) {
+            // Determine the final content to display
+            let finalContent;
+            if (data.ready) {
+                // If the server says it's ready, use the server's data.
+                finalContent = data.data;
+                console.log("From fetched data");
+                // Store the server data in localStorage for future visits.
+                localStorage.setItem("data", JSON.stringify(data.data));
+            } else {
+                // If not ready, but we have local data, use that.
+                // We parse it back into a JavaScript object from the string.
+                finalContent = JSON.parse(localData);
+                console.log("From localStorage");
+            }
+            
+            // Task is ready or local data exists, display UI and stop polling
+            document.getElementById("loading").style.display = "none";
+            document.getElementById("downloads").style.display = "block";
+            document.getElementById("text-area").style.display = "block";
+            
+            // Set the value of the text area
+            if(document.getElementById('text-area')){
+                // The value property is for text content only,
+                // so we use the string representation.
+                document.getElementById('text-area').value = finalContent; 
+                console.log("Value setted");
+            }
+        } else {
+            // Task is not ready and no local data, continue polling
+            setTimeout(checkStatus, 2000);
+        }
+    })
+    .catch(error => {
+        console.error("Error during status check:", error);
+        document.getElementById("loading").style.display = "none";
 
-        document.body.removeChild(a); // Clean up the temporary element
-        URL.revokeObjectURL(url); // Release the object URL
-    }
+        const errorPage = document.createElement("div");
+        errorPage.id = "error-page";
+        errorPage.style.textAlign = "center";
+        errorPage.innerHTML = `
+            <h2>An Error Occurred!</h2>
+            <p>We couldn't reach the server. Please try again later.</p>
+            <button id="go-home-btn" class="back-btn">Go Home</button>
+        `;
+        
+        document.getElementById('upload-area').appendChild(errorPage);
 
-    function checkStatus() {
-        fetch("/check_status")
-            .then(res => res.json())
-            .then(data => {
-                if (data.ready) {
-                    document.getElementById("loading").style.display = "none";
-                    document.getElementById("downloads").style.display = "block";
-                    if (!window.location.search.includes("reloaded")) {
-                        window.location.href = window.location.pathname + "?reloaded=1";
-                    }
-                } else {
-                    setTimeout(checkStatus, 2000); // keep checking
-                }
-            });
-    }
+        document.getElementById("go-home-btn").addEventListener("click", () => {
+            window.location.href = "/";
+        });
+    });
+}
+// Start polling immediately when the page loads
+// localStorage.setItem("data","false")
+window.onload = checkStatus;
 
-
-    // Start polling when page loads
-    window.onload = checkStatus;
 </script>
 {% endblock %}
