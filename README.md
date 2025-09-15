@@ -10,6 +10,8 @@ Making flashcards is a huge hassle. The process is a major time sink, and it's t
 
 FlashNote uses AI to automatically transform your study notes into structured, high-quality flashcards. Instead of spending hours reading through material and manually creating cards, you can get a ready-to-use Anki CSV file in seconds, allowing you to focus on what matters most: learning.
 
+:cyclone:[Click her to visit the site](https://flashnote-8b6m.onrender.com/?utm_source=GitHub&utm_medium=social&utm_campaign=README.md&utm_term=repository+details):cyclone:
+
 ---
 
 ## Key Features :sparkles:
