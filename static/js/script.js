@@ -5,7 +5,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const fileInput = document.getElementById('file-input');
     const textArea = document.getElementById('text-area');
     const warningMessage = document.getElementById('warning-message');
-    const submitBtn = document.getElementById('submit-btn');
+    const submitBtn = document.getElementById('upload');
 
     // Toggle dropdown menu visibility
     uploadBtn.addEventListener('click', () => {

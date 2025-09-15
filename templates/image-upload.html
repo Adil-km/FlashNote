@@ -4,7 +4,7 @@
 {% block head %}
 <script>
 window.onload = () =>{
-    document.getElementById('image-input').addEventListener('change', (e)=> {
+    document.getElementById('input-file').addEventListener('change', (e)=> {
     if (e.target.files.length > 0) {
         const file = e.target.files[0];
         if (file) {
@@ -26,6 +26,8 @@ window.onload = () =>{
     }
 });
 
+
+
 }
     
 </script>
@@ -39,11 +41,75 @@ window.onload = () =>{
     <main class="content-container">
         <div class="upload-area">
             <h1>Upload an Image</h1>
+
             <form id="form" method="post" enctype="multipart/form-data">
-                <p class="warning-message">Warning: Image size should be less than 10MB.</p>
-                <input type="file" id="image-input" name="imageFile" accept=".jpg,.jpeg,.png" required>
-                <button type="submit" class="submit-btn">Submit Image</button>
+                <div id="draggArea">
+                    <label for="input-file">
+                        <input type="file" id="input-file" name="imageFile" accept=".jpg,.jpeg,.png" required>
+                        <img id="img" src="{{ url_for('static', filename='public/drop-icon-mute.png') }}">
+                        <p>Drag and drop or click here<br>to upload image</p>
+                    </label>
+                    <span id="preview" hidden>Choosed file: None</span>
+                    
+                    <div class="form-actions">
+                        <button id="cancel" hidden>Cancel</button>
+                        <button type="submit" id="upload">Upload</button>
+                    </div>
+                </div>
+                
             </form>
+            <p class="warning-message">Note: Image size should be less than 10MB.</p>
         </div>
     </main>
+
+<script>
+        const draggArea = document.getElementById("draggArea")
+        const uploadBtn = document.getElementById("upload")
+        const inputFile = document.getElementById("input-file")
+        const cancelBtn = document.getElementById("cancel")
+        const previewText = document.getElementById("preview")
+        const img = document.getElementById("img")
+
+        document.addEventListener("DOMContentLoaded", () => {
+            uploadBtn.style.backgroundColor = "#bcc9bf";
+            img.setAttribute("src", "{{ url_for('static', filename='public/drop-icon-mute.png') }}");
+        });
+        draggArea.addEventListener("dragover",(e)=>{
+            e.preventDefault()
+        })
+        draggArea.addEventListener("drop", (e) => {
+            e.preventDefault();
+            const dt = new DataTransfer();
+            for (const file of e.dataTransfer.files) {
+                dt.items.add(file);
+            }
+            inputFile.files = dt.files;
+            inputFile.dispatchEvent(new Event("change", { bubbles: true }));
+        });
+        inputFile.addEventListener("change",(e)=>{
+            if (e.target.files.length === 0) {
+                cancelBtn.hidden = true;
+                previewText.hidden = true;
+                previewText.value = ""
+                uploadBtn.style.backgroundColor = "#bcc9bf";
+                img.setAttribute("src", "{{ url_for('static', filename='public/drop-icon-mute.png') }}");
+            }else{
+                previewText.hidden = false;
+                cancelBtn.hidden = false;
+                previewText.textContent = "Choosed file: " + e.target.files[0].name;
+                uploadBtn.style.backgroundColor = "#59de4d";
+                img.setAttribute("src", "{{ url_for('static', filename='public/drop-icon.png') }}");
+            }
+        })
+
+        cancelBtn.addEventListener("click", () => {
+            inputFile.value = "";
+            cancelBtn.hidden = true; 
+            previewText.hidden = true;
+            uploadBtn.style.backgroundColor = "#bcc9bf";
+            img.setAttribute("src", "{{ url_for('static', filename='public/drop-icon-mute.png') }}");
+        });
+    
+    </script>
+
 {% endblock %}
