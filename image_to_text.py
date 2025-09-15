@@ -33,6 +33,9 @@ def ocr_image(image_path, api_key):
         except Exception:
             return f"OCR API did not return JSON. Raw response: {response.text}"
         
+        if(os.path.exists(image_path)):
+            os.remove(image_path)
+
         # Check for API errors
         if isinstance(result, dict):
             if result.get('IsErroredOnProcessing'):

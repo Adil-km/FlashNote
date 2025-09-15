@@ -46,6 +46,8 @@ def ocr_pdf(pdf_path, api_key):
     except Exception as e:
         return f"An error occurred: {e}"
     print("[+]All pages scanned")
+    if(os.path.exists(pdf_path)):
+        os.remove(pdf_path)
     return "\n\n".join(full_transcription).strip()
 
 def save_to_text_file(text_content, output_filename):

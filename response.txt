@@ -1,4 +1,0 @@
-What phrase is commonly used to test typing skills and demonstrate all letters of the alphabet?:The quick brown fox jumps over the lazy dog.
-Which animal in the common pangram "The quick brown fox jumps over the lazy dog" is described as "lazy"?:The dog.
-In the sentence "The quick brown fox jumps over the lazy dog," which animal is performing the action of jumping?:The fox.
-What is the color of the fox in the pangram "The quick brown fox jumps over the lazy dog"?:Brown.
