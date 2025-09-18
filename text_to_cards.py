@@ -31,6 +31,7 @@ def text_to_card():
 	response = client.models.generate_content(
 		#model = "gemma-3-1b-it",
 		model="gemini-2.5-flash-lite",
+		#model="gemini-2.5-flash",
 		contents = prompt
 
 	)
@@ -38,7 +39,8 @@ def text_to_card():
 	res = response.text
 
 	with open("response.txt", "w") as f:
-		f.write(res)
+		if(res):
+			f.write(res)
 	with open("input_note.txt","w") as f:
 		f.write("")
 	return "test.py run successfully"
