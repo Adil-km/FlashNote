@@ -11,10 +11,10 @@ window.onload = () =>{
             const fileSizeInBytes = file.size;
             const fileSizeInMB = (fileSizeInBytes / (1024 * 1024)).toFixed(2);
 
-            if(fileSizeInMB<7){
+            if(fileSizeInMB<6){
                 localStorage.setItem("data","true")
             }else{
-                alert("Image size should be less than 6MB.")
+                alert("Image size should be less than 5MB.")
                 document.getElementById('form').addEventListener('submit', function(eventBtn) {
                     eventBtn.preventDefault(); 
                 });
@@ -49,7 +49,7 @@ window.onload = () =>{
                         <img id="img" src="{{ url_for('static', filename='public/drop-icon-mute.png') }}">
                         <p>Drag and drop or click here<br>to upload image</p>
                     </label>
-                    <span id="preview" hidden>Choosed file: None</span>
+                    <span id="preview" hidden>Chosen file: None</span>
                     
                     <div class="form-actions">
                         <button id="cancel" hidden>Cancel</button>
@@ -58,7 +58,7 @@ window.onload = () =>{
                 </div>
                 
             </form>
-            <p class="warning-message">Note: Image size should be less than 6MB.</p>
+            <p class="warning-message">Note: Image size should be less than 5MB.</p>
         </div>
     </main>
 
@@ -83,7 +83,12 @@ window.onload = () =>{
             const dt = new DataTransfer();
             
             for (const file of e.dataTransfer.files) {
-                dt.items.add(file);
+                
+                if ((file.type).split("/")[0] === "image") {
+                    dt.items.add(file);
+                }else {
+                    alert(`Only images files are allowed.`);
+                }
             }
             inputFile.files = dt.files;
             inputFile.dispatchEvent(new Event("change", { bubbles: true }));
@@ -97,11 +102,34 @@ window.onload = () =>{
                 uploadBtn.style.cursor = "default"
                 img.setAttribute("src", "{{ url_for('static', filename='public/drop-icon-mute.png') }}");
             }else{
-                previewText.hidden = false;
-                cancelBtn.hidden = false;
-                previewText.textContent = "Choosed file: " + e.target.files[0].name;
-                uploadBtn.style.backgroundColor = "#59de4d";
-                img.setAttribute("src", "{{ url_for('static', filename='public/drop-icon.png') }}");
+                const file = e.target.files[0]; 
+                const ext = file.name.split(".").at(-1).toLowerCase();
+                if (["jpg", "jpeg", "png"].includes(ext))  {
+                    previewText.hidden = false;
+                    cancelBtn.hidden = false;
+                    previewText.textContent = "Chosen file: " + e.target.files[0].name;
+
+                    // SIZE CHECK
+                    const fileSizeInMB = (file.size / (1024 * 1024)).toFixed(2);
+                    if (fileSizeInMB > 6) {
+                        alert("File size should be less than 5 MB.");
+                        inputFile.value = "";
+                        cancelBtn.hidden = true;
+                        previewText.hidden = true;
+                        uploadBtn.style.backgroundColor = "#bcc9bf";
+                        uploadBtn.style.cursor = "default"
+                        img.setAttribute("src", "{{ url_for('static', filename='public/drop-icon-mute.png') }}");
+                        return;
+                    }
+
+                    // If valid
+                    uploadBtn.style.backgroundColor = "#59de4d";
+                    uploadBtn.style.cursor = "pointer"
+                    img.setAttribute("src", "{{ url_for('static', filename='public/drop-icon.png') }}");
+                }
+                else{
+                    inputFile.value="";
+                }
             }
         })
 

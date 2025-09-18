@@ -11,7 +11,7 @@ import threading
 import markdown
 import emoji
 UPLOAD_FOLDER = 'temp_uploads'
-ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg'}
+ALLOWED_EXTENSIONS = {'pdf', 'png', 'jpg', 'jpeg'}
 
 app = Flask(__name__)
 

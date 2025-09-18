@@ -56,7 +56,7 @@ window.onload = () =>{
                         <img id="img" src="{{ url_for('static', filename='public/drop-icon-mute.png') }}">
                         <p>Drag and drop or click here<br>to upload PDF file</p>
                     </label>
-                    <span id="preview" hidden>Choosed file: None</span>
+                    <span id="preview" hidden>Chosen file: None</span>
                     
                     <div class="form-actions">
                         <button id="cancel" hidden>Cancel</button>
@@ -65,7 +65,7 @@ window.onload = () =>{
                 </div>
                 
             </form>
-            <p class="warning-message">Note: PDF should be less than 4 pages and less than 6MB in size.</p>
+            <p class="warning-message">Note: PDF should be less than 4 pages and less than 5MB in size.</p>
         </div>
 
 <script>
@@ -108,10 +108,10 @@ window.onload = () =>{
                 img.setAttribute("src", "{{ url_for('static', filename='public/drop-icon-mute.png') }}");
             } else {
                 const file = e.target.files[0];
-                if (file.name.split(".").at(-1).toLowerCase() === "pdf") {
+                if (file.type === "application/pdf") {
                     previewText.hidden = false;
                     cancelBtn.hidden = false;
-                    previewText.textContent = "Choosed file: " + file.name;
+                    previewText.textContent = "Chosen file " + file.name;
 
                     // PAGE COUNT CHECK
                     const arrayBuffer = await file.arrayBuffer();
@@ -145,6 +145,8 @@ window.onload = () =>{
                     uploadBtn.style.backgroundColor = "#59de4d";
                     uploadBtn.style.cursor = "pointer"
                     img.setAttribute("src", "{{ url_for('static', filename='public/drop-icon.png') }}");
+                }else{
+                    inputFile.value="";
                 }
             }
         });
