@@ -11,10 +11,10 @@ window.onload = () =>{
             const fileSizeInBytes = file.size;
             const fileSizeInMB = (fileSizeInBytes / (1024 * 1024)).toFixed(2);
 
-            if(fileSizeInMB<10.5){
+            if(fileSizeInMB<7){
                 localStorage.setItem("data","true")
             }else{
-                alert("Image size should be less than 10MB.")
+                alert("Image size should be less than 6MB.")
                 document.getElementById('form').addEventListener('submit', function(eventBtn) {
                     eventBtn.preventDefault(); 
                 });
@@ -58,7 +58,7 @@ window.onload = () =>{
                 </div>
                 
             </form>
-            <p class="warning-message">Note: Image size should be less than 10MB.</p>
+            <p class="warning-message">Note: Image size should be less than 6MB.</p>
         </div>
     </main>
 
@@ -72,6 +72,7 @@ window.onload = () =>{
 
         document.addEventListener("DOMContentLoaded", () => {
             uploadBtn.style.backgroundColor = "#bcc9bf";
+            uploadBtn.style.cursor = "default"
             img.setAttribute("src", "{{ url_for('static', filename='public/drop-icon-mute.png') }}");
         });
         draggArea.addEventListener("dragover",(e)=>{
@@ -80,6 +81,7 @@ window.onload = () =>{
         draggArea.addEventListener("drop", (e) => {
             e.preventDefault();
             const dt = new DataTransfer();
+            
             for (const file of e.dataTransfer.files) {
                 dt.items.add(file);
             }
@@ -92,6 +94,7 @@ window.onload = () =>{
                 previewText.hidden = true;
                 previewText.value = ""
                 uploadBtn.style.backgroundColor = "#bcc9bf";
+                uploadBtn.style.cursor = "default"
                 img.setAttribute("src", "{{ url_for('static', filename='public/drop-icon-mute.png') }}");
             }else{
                 previewText.hidden = false;
@@ -107,6 +110,7 @@ window.onload = () =>{
             cancelBtn.hidden = true; 
             previewText.hidden = true;
             uploadBtn.style.backgroundColor = "#bcc9bf";
+            uploadBtn.style.cursor = "default"
             img.setAttribute("src", "{{ url_for('static', filename='public/drop-icon-mute.png') }}");
         });
     

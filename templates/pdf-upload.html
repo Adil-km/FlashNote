@@ -12,10 +12,10 @@ window.onload = () =>{
             const fileSizeInBytes = file.size;
             const fileSizeInMB = (fileSizeInBytes / (1024 * 1024)).toFixed(2);
 
-            if(fileSizeInMB<10.5){
+            if(fileSizeInMB<6){
                 localStorage.setItem("data","true")
             }else{
-                alert("Image size should be less than 10MB.")
+                alert("Image size should be less than 5MB.")
                 document.getElementById('form').addEventListener('submit', function(eventBtn) {
                     eventBtn.preventDefault(); 
                 });
@@ -29,6 +29,14 @@ window.onload = () =>{
 
 }
 </script>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<script>
+    pdfjsLib.GlobalWorkerOptions.workerSrc =
+        "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
+</script>
+
 {% endblock %}
 
 
@@ -40,11 +48,119 @@ window.onload = () =>{
     <main class="content-container">
         <div class="upload-area">
             <h1>Upload a PDF</h1>
+
             <form id="form" method="post" enctype="multipart/form-data">
-                <p class="warning-message">Warning: Pages should be less than 6.</p>
-                <input type="file" id="pdf-input" name="pdfFile" accept=".pdf" required>
-                <button type="submit" class="submit-btn">Submit PDF</button>
+                <div id="draggArea">
+                    <label for="pdf-input">
+                        <input type="file" id="pdf-input" name="pdfFile" accept="application/pdf" required>
+                        <img id="img" src="{{ url_for('static', filename='public/drop-icon-mute.png') }}">
+                        <p>Drag and drop or click here<br>to upload PDF file</p>
+                    </label>
+                    <span id="preview" hidden>Choosed file: None</span>
+                    
+                    <div class="form-actions">
+                        <button id="cancel" hidden>Cancel</button>
+                        <button type="submit" id="upload">Upload</button>
+                    </div>
+                </div>
+                
             </form>
+            <p class="warning-message">Note: PDF should be less than 4 pages and less than 6MB in size.</p>
         </div>
+
+<script>
+
+    const draggArea = document.getElementById("draggArea")
+    const uploadBtn = document.getElementById("upload")
+    const inputFile = document.getElementById("pdf-input")
+        const cancelBtn = document.getElementById("cancel")
+        const previewText = document.getElementById("preview")
+        const img = document.getElementById("img")
+        
+        document.addEventListener("DOMContentLoaded", () => {
+            uploadBtn.style.backgroundColor = "#bcc9bf";
+            uploadBtn.style.cursor = "default"
+            img.setAttribute("src", "{{ url_for('static', filename='public/drop-icon-mute.png') }}");
+        });
+        draggArea.addEventListener("dragover",(e)=>{
+            e.preventDefault()
+        })
+        draggArea.addEventListener("drop", (e) => {
+            e.preventDefault();
+            const dt = new DataTransfer();
+            for (const file of e.dataTransfer.files) {
+                if (file.type === "application/pdf") {
+                    dt.items.add(file);
+                }else {
+                    alert(`Only PDF files are allowed.`);
+                }
+            }
+            inputFile.files = dt.files;
+            inputFile.dispatchEvent(new Event("change", { bubbles: true }));
+        });
+        inputFile.addEventListener("change", async (e) => {
+            if (e.target.files.length === 0) {
+                cancelBtn.hidden = true;
+                previewText.hidden = true;
+                previewText.value = "";
+                uploadBtn.style.backgroundColor = "#bcc9bf";
+                uploadBtn.style.cursor = "default"
+                img.setAttribute("src", "{{ url_for('static', filename='public/drop-icon-mute.png') }}");
+            } else {
+                const file = e.target.files[0];
+                if (file.name.split(".").at(-1).toLowerCase() === "pdf") {
+                    previewText.hidden = false;
+                    cancelBtn.hidden = false;
+                    previewText.textContent = "Choosed file: " + file.name;
+
+                    // PAGE COUNT CHECK
+                    const arrayBuffer = await file.arrayBuffer();
+                    const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+
+                    if (pdf.numPages > 4) {
+                        alert("PDF should not exceed 4 pages.");
+                        inputFile.value = "";
+                        cancelBtn.hidden = true;
+                        previewText.hidden = true;
+                        uploadBtn.style.backgroundColor = "#bcc9bf";
+                        uploadBtn.style.cursor = "default"
+                        img.setAttribute("src", "{{ url_for('static', filename='public/drop-icon-mute.png') }}");
+                        return;
+                    }
+
+                    // SIZE CHECK
+                    const fileSizeInMB = (file.size / (1024 * 1024)).toFixed(2);
+                    if (fileSizeInMB > 6) {
+                        alert("File size should be less than 5 MB.");
+                        inputFile.value = "";
+                        cancelBtn.hidden = true;
+                        previewText.hidden = true;
+                        uploadBtn.style.backgroundColor = "#bcc9bf";
+                        uploadBtn.style.cursor = "default"
+                        img.setAttribute("src", "{{ url_for('static', filename='public/drop-icon-mute.png') }}");
+                        return;
+                    }
+
+                    // If valid
+                    uploadBtn.style.backgroundColor = "#59de4d";
+                    uploadBtn.style.cursor = "pointer"
+                    img.setAttribute("src", "{{ url_for('static', filename='public/drop-icon.png') }}");
+                }
+            }
+        });
+
+
+        cancelBtn.addEventListener("click", () => {
+            inputFile.value = "";
+            cancelBtn.hidden = true; 
+            previewText.hidden = true;
+            uploadBtn.style.backgroundColor = "#bcc9bf";
+            uploadBtn.style.cursor = "default"
+            img.setAttribute("src", "{{ url_for('static', filename='public/drop-icon-mute.png') }}");
+        });
+    
+    </script>
+        
+
     </main>
 {% endblock %}

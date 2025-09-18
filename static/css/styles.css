@@ -220,7 +220,8 @@ label{
     justify-content: center;
 }
 
-#form #input-file {
+#form #input-file,
+#form #pdf-input{
   position: absolute;
   left: -9999px;
 }
