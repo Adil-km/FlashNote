@@ -1,5 +1,40 @@
 {% extends 'base.html' %}
 {% block title %}Download{% endblock %}
+{% block head%}
+
+<style>
+  /* Basic setup for centering the loader on the page */
+  #loading {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    background-color: #fff; /* White background */
+    gap: 20px;
+  }
+
+  /* The loader element itself */
+  .loader {
+    width: 60px;
+    height: 60px;
+    border: 10px solid rgba(255, 0, 0, 0.2); /* Semi-transparent red base border */
+    border-top-color: #ff0000; /* Solid red for the spinning part */
+    border-radius: 50%;
+    animation: spin 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+  }
+
+  /* The keyframes for the spinning animation */
+  @keyframes spin {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+</style>
+
+{% endblock%}
 
 {% block body %}
 
@@ -9,7 +44,12 @@
         <h1>File Conversion</h1>
 
 
-        <div id="loading">⏳ Processing your file... please wait</div>
+        <div id="loading">
+            <div class="loader"></div>
+            <span>
+                Processing your file... please wait
+            </span>
+        </div>
         <textarea id="text-area" name="textData" style="display: none;"></textarea>
 
         <div id="downloads" style="display: none;">
