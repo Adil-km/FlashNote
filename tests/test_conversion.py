@@ -8,8 +8,8 @@ SAMPLES_DIR = Path(__file__).parent / "samples"
 SAMPLE_PDF = SAMPLES_DIR / "sample.pdf"
 SAMPLE_IMG = SAMPLES_DIR / "sample.jpg"
 
-EXPECTED_IMG_TEXT = "THIS IS A TEST IMAGE\n"
-EXPECTED_PDF_TEXT = "This is a pdf test page 1\n"
+EXPECTED_IMG_TEXT = "THIS IS A TEST IMAGE"
+EXPECTED_PDF_TEXT = "This is a pdf test page 1"
 
 @pytest.fixture
 def cleanup_files():
