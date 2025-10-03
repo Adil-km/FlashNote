@@ -26,7 +26,7 @@ def cleanup_files():
             p.unlink()
 
 def test_pdf_conversion_api(cleanup_files):
-    result = pdf_OCR(str(SAMPLE_PDF), test_mode=False)
+    result = pdf_OCR(str(SAMPLE_PDF))
     with open("input_note.txt") as f:
         content = f.read()
     print("PDF OCR Output:\n", content)
@@ -35,7 +35,7 @@ def test_pdf_conversion_api(cleanup_files):
     assert result.strip() == EXPECTED_PDF_TEXT
 
 def test_image_conversion_api(cleanup_files):
-    result = image_OCR(str(SAMPLE_IMG), test_mode=False)
+    result = image_OCR(str(SAMPLE_IMG))
     with open("input_note.txt") as f:
         content = f.read()
     print("Image OCR Output:\n", content)
