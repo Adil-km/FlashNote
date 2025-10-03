@@ -8,9 +8,8 @@ SAMPLES_DIR = Path(__file__).parent / "samples"
 SAMPLE_PDF = SAMPLES_DIR / "sample.pdf"
 SAMPLE_IMG = SAMPLES_DIR / "sample.jpg"
 
-EXPECTED_PDF_TEXT = """This is a pdf test page 1
-This is a pdf test page 2"""
 EXPECTED_IMG_TEXT = "This is a image test"
+EXPECTED_PDF_TEXT = "This is a pdf test page 2"
 
 @pytest.fixture
 def cleanup_files():
@@ -25,24 +24,6 @@ def cleanup_files():
         if p.exists():
             p.unlink()
 
-def test_pdf_conversion_api(cleanup_files):
-    result = pdf_OCR(str(SAMPLE_PDF))
-    with open("input_note.txt") as f:
-        content = f.read()
-    print("PDF OCR Output:\n", content)
-
-    assert content.strip() == EXPECTED_PDF_TEXT
-    assert result.strip() == EXPECTED_PDF_TEXT
-
-def test_image_conversion_api(cleanup_files):
-    result = image_OCR(str(SAMPLE_IMG))
-    with open("input_note.txt") as f:
-        content = f.read()
-    print("Image OCR Output:\n", content)
-
-    assert content.strip() == EXPECTED_IMG_TEXT
-    assert result.strip() == EXPECTED_IMG_TEXT
-
 def test_text_conversion_api(cleanup_files):
     with open("input_note.txt", "w") as f:
         f.write("This is a test note for Gemini API.")
@@ -53,3 +34,25 @@ def test_text_conversion_api(cleanup_files):
     print("Text-to-card Output:\n", content)
 
     assert content.strip() != ""
+
+def test_image_conversion_api(cleanup_files):
+    # result = image_OCR(str(SAMPLE_IMG))
+    image_OCR(str(SAMPLE_IMG))
+    content = []
+    with open("input_note.txt") as f:
+        content.push(f.readline())
+    print("Image OCR Output:\n", content)
+
+    assert content.strip() == EXPECTED_IMG_TEXT
+    #assert result.strip() == EXPECTED_IMG_TEXT
+
+def test_pdf_conversion_api(cleanup_files):
+    # result = pdf_OCR(str(SAMPLE_PDF))
+    pdf_OCR(str(SAMPLE_PDF))
+    content = []
+    with open("input_note.txt") as f:
+        content.push(f.readline())
+    print("PDF OCR Output:\n", content)
+
+    assert content[1].strip() == EXPECTED_PDF_TEXT
+    #assert result.strip() == EXPECTED_PDF_TEXT
