@@ -1,28 +1,41 @@
-name: Flask CI
+name: Flask CI Real OCR
 
 on:
-  push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
+  workflow_dispatch:
 
 jobs:
   test:
     runs-on: ubuntu-latest
+    env:
+      OCR_API: ${{ secrets.OCR_API }}
+      GEMINI_API: ${{ secrets.GEMINI_API }}
 
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v3
+    - uses: actions/checkout@v3
 
     - name: Set up Python
       uses: actions/setup-python@v4
       with:
         python-version: "3.11"
 
+    - name: Cache pip
+      uses: actions/cache@v3
+      with:
+        path: ~/.cache/pip
+        key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
+        restore-keys: |
+          ${{ runner.os }}-pip-
+
     - name: Install dependencies
       run: |
+        sudo apt-get update && sudo apt-get install -y poppler-utils tesseract-ocr
         python -m pip install --upgrade pip
         pip install -r requirements.txt
 
-    - name: Run tests with pytest
-      run: PYTHONPATH=. pytest -v
+    - name: Check environment
+      run: |
+        if [ -z "$OCR_API" ]; then echo "OCR_API not set" && exit 1; fi
+        if [ -z "$GEMINI_API" ]; then echo "GEMINI_API not set" && exit 1; fi
+
+    - name: Run tests
+      run: PYTHONPATH=. pytest tests/test_conversion.py -v --maxfail=1 --disable-warnings
