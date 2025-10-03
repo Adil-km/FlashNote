@@ -40,7 +40,7 @@ def test_image_conversion_api(cleanup_files):
     image_OCR(str(SAMPLE_IMG))
     content = []
     with open("input_note.txt") as f:
-        content.push(f.readline())
+        content.append(f.readline())
     print("Image OCR Output:\n", content)
 
     assert content.strip() == EXPECTED_IMG_TEXT
@@ -51,7 +51,7 @@ def test_pdf_conversion_api(cleanup_files):
     pdf_OCR(str(SAMPLE_PDF))
     content = []
     with open("input_note.txt") as f:
-        content.push(f.readline())
+        content.append(f.readline())
     print("PDF OCR Output:\n", content)
 
     assert content[1].strip() == EXPECTED_PDF_TEXT
