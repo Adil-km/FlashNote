@@ -8,7 +8,7 @@ SAMPLES_DIR = Path(__file__).parent / "samples"
 SAMPLE_PDF = SAMPLES_DIR / "sample.pdf"
 SAMPLE_IMG = SAMPLES_DIR / "sample.jpg"
 
-EXPECTED_IMG_TEXT = "This is a image test"
+EXPECTED_IMG_TEXT = ['This is a\n',"image\n","test\n"]
 EXPECTED_PDF_TEXT = "This is a pdf test page 2"
 
 @pytest.fixture
@@ -43,7 +43,7 @@ def test_image_conversion_api(cleanup_files):
         content.append(f.readline())
     print("Image OCR Output:\n", content)
 
-    assert content.strip() == EXPECTED_IMG_TEXT
+    assert content == EXPECTED_IMG_TEXT
     #assert result.strip() == EXPECTED_IMG_TEXT
 
 def test_pdf_conversion_api(cleanup_files):
@@ -54,5 +54,5 @@ def test_pdf_conversion_api(cleanup_files):
         content.append(f.readline())
     print("PDF OCR Output:\n", content)
 
-    assert content[1].strip() == EXPECTED_PDF_TEXT
+    assert content[1] == EXPECTED_PDF_TEXT
     #assert result.strip() == EXPECTED_PDF_TEXT
