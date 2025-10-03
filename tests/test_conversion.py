@@ -36,21 +36,19 @@ def test_text_conversion_api(cleanup_files):
     assert content.strip() != ""
 
 def test_image_conversion_api(cleanup_files):
-    # result = image_OCR(str(SAMPLE_IMG))
-    image_OCR(str(SAMPLE_IMG))
+    result = image_OCR(str(SAMPLE_IMG))
     with open("input_note.txt") as f:
         content = f.read()
     print("Image OCR Output:\n", content)
 
     assert content.strip() == EXPECTED_IMG_TEXT
-    #assert result.strip() == EXPECTED_IMG_TEXT
+    assert result.strip() == EXPECTED_IMG_TEXT
 
 def test_pdf_conversion_api(cleanup_files):
-    # result = pdf_OCR(str(SAMPLE_PDF))
-    pdf_OCR(str(SAMPLE_PDF))
+    result = pdf_OCR(str(SAMPLE_PDF))
     with open("input_note.txt") as f:
         content=f.read()
     print("PDF OCR Output:\n", content)
 
     assert content.strip() == EXPECTED_PDF_TEXT
-    #assert result.strip() == EXPECTED_PDF_TEXT
+    assert result.strip() == EXPECTED_PDF_TEXT

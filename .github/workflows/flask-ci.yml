@@ -38,4 +38,4 @@ jobs:
         if [ -z "$GEMINI_API" ]; then echo "GEMINI_API not set" && exit 1; fi
 
     - name: Run tests
-      run: PYTHONPATH=. pytest tests/test_conversion.py -v --maxfail=1 --disable-warnings
+      run: PYTHONPATH=. pytest -s -v tests/test_conversion.py --maxfail=1 --disable-warnings
