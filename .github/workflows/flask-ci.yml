@@ -1,9 +1,6 @@
-name: Flask CI OCR
+name: Flask CI Real OCR
 
-# Schedule daily at 12:00 AM IST (UTC+5:30 → 6:30 PM UTC previous day)
 on:
-  schedule:
-    - cron: '30 18 * * *'
   workflow_dispatch:
 
 jobs:
@@ -12,60 +9,33 @@ jobs:
     env:
       OCR_API: ${{ secrets.OCR_API }}
       GEMINI_API: ${{ secrets.GEMINI_API }}
-      EMAIL_USERNAME: ${{ secrets.EMAIL_USERNAME }}
-      EMAIL_PASSWORD: ${{ secrets.EMAIL_PASSWORD }}
 
     steps:
-      - uses: actions/checkout@v3
+    - uses: actions/checkout@v3
 
-      - name: Set up Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: "3.11"
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: "3.11"
 
-      - name: Cache pip
-        uses: actions/cache@v3
-        with:
-          path: ~/.cache/pip
-          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
-          restore-keys: |
-            ${{ runner.os }}-pip-
+    - name: Cache pip
+      uses: actions/cache@v3
+      with:
+        path: ~/.cache/pip
+        key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
+        restore-keys: |
+          ${{ runner.os }}-pip-
 
-      - name: Install dependencies
-        run: |
-          sudo apt-get update && sudo apt-get install -y poppler-utils tesseract-ocr
-          python -m pip install --upgrade pip
-          pip install -r requirements.txt
+    - name: Install dependencies
+      run: |
+        sudo apt-get update && sudo apt-get install -y poppler-utils tesseract-ocr
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
 
-      - name: Check environment variables
-        run: |
-          if [ -z "$OCR_API" ]; then echo "OCR_API not set" && exit 1; fi
-          if [ -z "$GEMINI_API" ]; then echo "GEMINI_API not set" && exit 1; fi
-          if [ -z "$EMAIL_USERNAME" ]; then echo "EMAIL_USERNAME not set" && exit 1; fi
-          if [ -z "$EMAIL_PASSWORD" ]; then echo "EMAIL_PASSWORD not set" && exit 1; fi
+    - name: Check environment
+      run: |
+        if [ -z "$OCR_API" ]; then echo "OCR_API not set" && exit 1; fi
+        if [ -z "$GEMINI_API" ]; then echo "GEMINI_API not set" && exit 1; fi
 
-      - name: Run OCR tests
-        id: pytest
-        run: |
-          pytest -s -v tests/test_conversion.py --maxfail=1 --disable-warnings | tee pytest_output.log
-        continue-on-error: true
-
-      - name: Send email if tests failed
-        if: failure()
-        uses: dawidd6/action-send-mail@v3
-        with:
-          server_address: smtp.gmail.com
-          server_port: 465
-          username: ${{ secrets.EMAIL_USERNAME }}
-          password: ${{ secrets.EMAIL_PASSWORD }}
-          subject: "GitHub Action: Flask CI OCR Tests Failed"
-          body: |
-            Some tests failed for Flask CI OCR.
-
-            Check logs: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
-
-            Pytest Output:
-            ${{ steps.pytest.outputs.stdout }}
-          from: ${{ secrets.EMAIL_USERNAME }}
-          to: ${{ secrets.EMAIL_USERNAME }}
-          secure: true
+    - name: Run tests
+      run: PYTHONPATH=. pytest -s -v tests/test_conversion.py --maxfail=1 --disable-warnings
