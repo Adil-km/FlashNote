@@ -11,7 +11,6 @@ jobs:
     runs-on: ubuntu-latest
     env:
       OCR_API: ${{ secrets.OCR_API }}
-      GEMINI_API: ${{ secrets.GEMINI_API }}
 
     steps:
       - uses: actions/checkout@v3
@@ -38,7 +37,6 @@ jobs:
       - name: Check environment
         run: |
           if [ -z "$OCR_API" ]; then echo "OCR_API not set" && exit 1; fi
-          if [ -z "$GEMINI_API" ]; then echo "GEMINI_API not set" && exit 1; fi
 
       - name: Run OCR tests
         run: PYTHONPATH=. pytest -s -v tests/test_conversion.py --maxfail=1 --disable-warnings
