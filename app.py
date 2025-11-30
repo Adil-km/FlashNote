@@ -1,6 +1,7 @@
 import os
 import time
-from flask import Flask, flash, request, redirect, url_for, render_template, jsonify, session
+from flask import Flask, request, redirect, send_from_directory, url_for, render_template, jsonify, session
+from flask_cors import CORS
 from werkzeug.utils import secure_filename
 
 from pdf_to_cards import pdf_OCR
@@ -18,12 +19,18 @@ app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['SECRET_KEY'] = 'a_very_secret_key'
 
+CORS(app, origins=os.getenv('CORS'))
+
 def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 def session_clear():
     session.pop("cards", None)
+
+@app.route('/ping.js')
+def serve_ping():
+    return send_from_directory('static', 'ping.js')
 
 @app.route('/', methods=['GET'])
 def home():
