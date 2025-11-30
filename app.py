@@ -19,7 +19,18 @@ app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['SECRET_KEY'] = 'a_very_secret_key'
 
-CORS(app, origins=os.getenv('CORS'))
+# CORS(app, origins=os.getenv('CORS'))
+CORS(app, resources={
+    r"/*": {
+        "origins": [
+            "http://localhost:5173",
+            "https://demo-project-landing-page.vercel.app",
+            "https://my-portfolio-git-main-adil-kms-projects.vercel.app",
+            "https://my-portfolio-awci1rvd7-adil-kms-projects.vercel.app",
+            "https://madebyadil.dev"
+        ]
+    }
+})
 
 def allowed_file(filename):
     return '.' in filename and \
