@@ -1,41 +1,65 @@
-# FlashNote :books:
+# FlashNote
 
-**Effortlessly turn your study materials into Anki flashcards with the power of AI 🤖**
-
----
-
-## About FlashNote :anchor:
-
-Making flashcards is a huge hassle. The process is a major time sink, and it's tough to create cards that are actually effective. We built FlashNote to solve this problem by taking the tedious work off your hands.
-
-FlashNote uses AI to automatically transform your study notes into structured, high-quality flashcards. Instead of spending hours reading through material and manually creating cards, you can get a ready-to-use Anki CSV file in seconds, allowing you to focus on what matters most: learning.
-
-:cyclone:[Click her to visit the site](https://flashnote-8b6m.onrender.com/?utm_source=GitHub&utm_medium=social&utm_campaign=README.md&utm_term=repository+details):cyclone:
+**An AI-powered application that automatically converts study materials into structured, ready-to-import Anki flashcards.**
 
 ---
 
-## Key Features :sparkles:
+## Live Demo
 
-* **AI-Powered Conversion:** Converts your study materials into structured flashcard formats automatically, saving you time and effort.
-* **Multiple Input Methods:** Easily generate flashcards by uploading a PDF :page_facing_up:, an image of your notes :orange_book:, or by pasting in text directly.
-* **Anki-Compatible CSV:** Download a `.csv` file that is perfectly formatted and ready to import directly into AnkiDroid, Anki, or any other compatible flashcard software.
+**Live Application:** [Visit FlashNote](https://flashnote-8b6m.onrender.com)
 
----
+> <img src="assests/pdf_demo.gif" alt="FlashNote PDF file Demo" width="500">
+*PDF file uploading demo*
 
-## How to Get Started :raised_hand:
+> <img src="assests/img_demo.gif" alt="FlashNote Image file Demo" width="500">
+*Image file uploading demo*
 
-It's easy to create your first set of flashcards with FlashNote!
-
-1.  **Choose Your Method:** Select whether you want to upload a PDF, an image, or paste in text.
-2.  **Upload or Paste:** Provide your study materials to the AI.
-3.  **Download:** Click the "Download" button to save your Anki-compatible CSV file.
+> <img src="assests/text_demo.gif" alt="FlashNote Text Demo" width="500">
+*Text uploading demo*
 
 ---
 
-## Contact :speech_balloon:
+## Problem Statement
 
-Want to learn more about this project or connect with the creator?
+The manual creation of spaced-repetition flashcards is a highly time-consuming process. Learners frequently expend disproportionate effort extracting information, formatting data, and inputting it into systems like Anki, which detracts from the primary objective of studying the core material.
 
-* [Portfolio](https://my-portfolio-gamma-nine-79.vercel.app/)
-* [Github/Adil-km](https://github.com/Adil-km/FlashNote)
-* [LinkedIn/adil-km](https://www.linkedin.com/in/adil-km)
+**The Solution:** FlashNote addresses this inefficiency through automation. By utilizing artificial intelligence, the application processes raw study materials—including PDFs, images, and raw text—and instantly generates structured, high-quality Q&A flashcards. This allows users to bypass manual data entry and immediately begin spaced-repetition learning.
+
+---
+
+## Key Features
+
+* **AI-Driven Data Extraction:** Automatically parses complex study materials and structures the extracted knowledge into logical question-and-answer pairs.
+* **Versatile Input Processing:** Supports multiple data formats, allowing users to upload PDF documents, images of physical notes, or direct text input.
+* **Seamless Anki Integration:** Generates a clean, correctly formatted `.csv` file engineered specifically for direct import into Anki and AnkiDroid environments.
+* **Significant Time Optimization:** Reduces a multi-hour manual data entry workflow into an instantaneous, automated process.
+
+---
+
+## Technical Architecture & Stack
+
+FlashNote is built utilizing a lightweight, efficient architecture designed for rapid processing and API integration:
+
+* **Backend Framework (Python & Flask):** Selected to provide a robust, lightweight server environment highly capable of handling file uploads and routing API requests efficiently.
+* **Frontend (HTML, CSS, JavaScript):** Utilized to build a responsive, intuitive, and accessible user interface without the overhead of heavy client-side frameworks.
+* **AI Engine (Gemini API):** Implemented to power the core natural language processing, ensuring accurate context extraction and logical flashcard generation from diverse text sources.
+* **Optical Character Recognition (OCR Space API):** Integrated to accurately extract text data from uploaded image files, enabling the processing of handwritten or photographed notes.
+
+---
+
+## Getting Started
+
+To utilize FlashNote for your study materials:
+
+1. **Select Input Method:** Choose between PDF, Image, or Text on the application interface.
+2. **Upload Material:** Provide your source document or text to the system.
+3. **Generate & Download:** Process the file and download the resulting Anki-compatible `.csv` file for immediate import into your spaced-repetition software.
+
+---
+
+## Connect & Project Links
+
+* **Live Deployment:** [FlashNote Web App](https://flashnote-8b6m.onrender.com)
+* **GitHub Repository:** [Adil-km/FlashNote](https://github.com/Adil-km/FlashNote)
+* **Developer Portfolio:** [Adil's Portfolio](https://my-portfolio-gamma-nine-79.vercel.app/)
+* **LinkedIn:** [Adil KM](https://www.linkedin.com/in/adil-km)

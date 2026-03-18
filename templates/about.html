@@ -1,48 +1,146 @@
 {% extends 'base.html' %}
 
-{% block title %}Upload image{% endblock %}
+{% block title %}About FlashNote{% endblock %}
+
 {% block head %}
 <script>
-    localStorage.removeItem("data")
+    localStorage.removeItem("data");
 </script>
 
     <style>
-        /* Add some basic styling for Markdown elements */
-        .readme { 
-            font-family: sans-serif; 
-            line-height: 1.6; 
-            max-width: 800px; 
-            margin: auto; 
-            padding: 20px; 
-            background-color: white;
-            border-radius: 5px;
+        .about-wrapper {
+            padding: 2rem 1rem;
+            display: flex;
+            justify-content: center;
         }
+
+        .readme { 
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            line-height: 1.7; 
+            width: 100%;
+            max-width: 700px;
+            padding: 40px 50px; 
+            background-color: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06); 
+            color: #374151; 
+            box-sizing: border-box;
+        }
+
         .readme h1,
-        .readme h2,
-        .readme h3 { 
-            color: #333; }
-        .readme a{
-            text-decoration:none;
-            padding: 3px;
-            margin-inline: 3px;
-            background-color: #f9efdc;
-            color: rgb(0, 27, 85);
-            border-radius: 4px;
+        .readme h2 { 
+            color: #111827; 
+            margin-top: 1.5em;
+            margin-bottom: 0.8em;
+            font-weight: 700;
+        }
+
+        .readme h1 {
+            margin-top: 0;
+            font-size: 2.5rem;
+            letter-spacing: -0.025em;
+            border-bottom: 2px solid #f3f4f6;
+            padding-bottom: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .readme h2 {
+            font-size: 1.3rem;
+            border-bottom: 1px solid #e5e7eb;
+            padding-bottom: 0.4rem;
+        }
+
+        .readme p {
+            margin-bottom: 1.2em;
+        }
+
+        .readme a {
+            text-decoration: none;
+            color: #2563eb;
+            font-weight: 500;
+            border-bottom: 1px solid transparent;
+            transition: all 0.2s ease;
+        }
+
+        .readme a:hover {
+            color: #1d4ed8;
+            border-bottom: 1px solid #1d4ed8;
+        }
+
+        .readme ul, .readme ol {
+            padding-left: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .readme li {
+            margin-bottom: 0.75rem;
+        }
+
+        .readme li::marker {
+            color: #9ca3af; 
+            font-weight: 600;
+        }
+
+        @media (max-width: 768px) {
+            .readme {
+                padding: 30px 25px;
+                border-radius: 8px;
+            }
+            .readme h1 {
+                font-size: 2rem;
+            }
+            .readme h2 {
+                font-size: 1.2rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .about-wrapper {
+                padding: 1rem 0.5rem;
+            }
+            .readme {
+                padding: 20px 15px;
+                box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+            }
+            .readme h1 {
+                font-size: 1.75rem;
+            }
         }
     </style>
 {% endblock %}
-
 
 {% block body %}
 
 {% include "back-btn.html" %}
 
-<main class="content-container">
+<main class="content-container about-wrapper">
     <div class="readme">
-        {{ readme_html | safe }}
+        <h1>FlashNote</h1>
+        
+        <p><strong>FlashNote is an AI-driven web application designed to eliminate the tedious process of manual flashcard creation.</strong></p>
+        <p>Instead of spending hours reading through materials and typing out cards, FlashNote instantly transforms your notes into structured, ready-to-import Anki flashcards. It handles the data extraction so you can focus entirely on spaced-repetition learning.</p>
+
+        <h2>Core Features</h2>
+        <ul>
+            <li><strong>AI-Powered Conversion:</strong> Automatically extracts key concepts and formats them into logical question-and-answer pairs.</li>
+            <li><strong>Flexible Inputs:</strong> Generate flashcards by uploading PDF documents, images of physical notes, or by pasting raw text directly.</li>
+            <li><strong>Anki-Ready Export:</strong> Instantly downloads a clean <code>.csv</code> file perfectly formatted for direct import into Anki or AnkiDroid.</li>
+        </ul>
+
+        <h2>How to Use</h2>
+        <ol>
+            <li><strong>Select Input:</strong> Choose whether you want to provide a PDF, an image, or raw text.</li>
+            <li><strong>Upload:</strong> Feed your study material into the application.</li>
+            <li><strong>Download & Import:</strong> Grab the generated CSV file and import it directly into your Anki deck.</li>
+        </ol>
+
+        <h2>Project Links</h2>
+        <ul>
+            <li><strong>Live Site:</strong> <a href="https://flashnote-8b6m.onrender.com" target="_blank">Try FlashNote</a></li>
+            <li><strong>Source Code:</strong> <a href="https://github.com/Adil-km/FlashNote" target="_blank">GitHub Repository</a></li>
+            <li><strong>Developer:</strong> <a href="https://my-portfolio-gamma-nine-79.vercel.app/" target="_blank">Portfolio</a> | <a href="https://www.linkedin.com/in/adil-km" target="_blank">LinkedIn</a></li>
+        </ul>
     </div>
 </main>
-
-
 
 {% endblock %}
